@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doss Does English - SSLC Test Series</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #eef2f5; color: #333; }
+        
+        /* HEADER CSS */
+        .header { 
+            background-color: #003366; 
+            color: white; 
+            min-height: 130px; 
+            padding: 10px 20px; 
+            border-radius: 8px 8px 0 0; 
+            position: relative; 
+            display: flex;
+            justify-content: center; 
+            align-items: center;     
+        }
+
+        .logo {
+            position: absolute; 
+            left: 25px; 
+            height: 110px; 
+            width: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header-text {
+            text-align: center; 
+            z-index: 1;
+            padding: 0 20px; 
+        }
+
+        @media (max-width: 650px) {
+            .header { flex-direction: column; min-height: auto; padding: 20px; }
+            .logo { position: static; transform: none; margin-bottom: 15px; height: 90px; }
+        }
+
+        .container { background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; box-sizing: border-box; }
+        
+        .question-block { background: #f9f9f9; padding: 15px; margin-bottom: 20px; border-left: 5px solid #003366; border-radius: 4px; }
+        .question-text { font-size: 1.1em; font-weight: 600; margin-bottom: 10px; }
+        .options label { display: block; padding: 8px; cursor: pointer; border-radius: 4px; transition: background 0.2s; font-weight: normal; }
+        .options label:hover { background-color: #e6f0ff; }
+        .options input { width: auto; margin-right: 10px; }
+
+        button { width: 100%; padding: 15px; background-color: #28a745; color: white; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        button:hover { background-color: #218838; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        #resultArea { display: none; }
+        .score-box { text-align: center; background: #e8f5e9; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #c8e6c9; }
+        .score-display { font-size: 2.5em; color: #2e7d32; font-weight: bold; }
+        
+        .review-block { margin-top: 20px; padding: 15px; border-bottom: 1px solid #eee; }
+        .review-q { font-weight: bold; margin-bottom: 5px; }
+        .review-your-ans { margin-bottom: 2px; }
+        .status-correct { color: green; font-weight: bold; }
+        .status-wrong { color: #d32f2f; font-weight: bold; }
+        .correct-ans-display { color: #555; font-size: 0.9em; font-style: italic; }
+
+        .footer { margin-top: 20px; text-align: center; font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="Doss Does Logo Transparent.png" alt="Doss Does Logo" class="logo">
+    <div class="header-text">
+        <h1 style="margin: 0; font-size: 2.4em; letter-spacing: 1px;">Doss Does English</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 1.2em;">SSLC English - One Mark Test Series</p>
+    </div>
+</div>
+
+<div class="container" id="quizContainer">
+    <h2 id="testTitle" style="text-align:center; color:#555;">Loading Test...</h2>
+    <hr>
+    
+    <div id="studentDetails">
+        <div class="form-group">
+            <label>Student Name:</label>
+            <input type="text" id="studentName" placeholder="Enter full name" required>
+        </div>
+        
+        <div class="row" style="display:flex; gap:20px;">
+            <div class="form-group" style="flex:1;">
+                <label>Class:</label>
+                <select id="classVal">
+                    <option value="10">10th Standard</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:1;">
+                <label>Section:</label>
+                <select id="section" onchange="toggleCustomSection()">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="K">K</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="N">N</option>
+                    <option value="O">O</option>
+                    <option value="Others">Others</option>
+                </select>
+                <input type="text" id="customSection" placeholder="Enter Section" style="display:none; margin-top:10px;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>School Name:</label>
+            <select id="schoolSelect" onchange="toggleCustomSchool()">
+                <option value="GHSS Kanjanur">GHSS Kanjanur</option>
+                <option value="Others">Others (Specify)</option>
+            </select>
+            <input type="text" id="customSchool" placeholder="Type your school name" style="display:none; margin-top:10px;">
+        </div>
+
+        <div class="form-group">
+            <label>District:</label>
+            <select id="districtSelect">
+                <option value="Villupuram">Villupuram</option>
+                <option value="Ariyalur">Ariyalur</option>
+                <option value="Chengalpattu">Chengalpattu</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Coimbatore">Coimbatore</option>
+                <option value="Cuddalore">Cuddalore</option>
+                <option value="Dharmapuri">Dharmapuri</option>
+                <option value="Dindigul">Dindigul</option>
+                <option value="Erode">Erode</option>
+                <option value="Kallakurichi">Kallakurichi</option>
+                <option value="Kancheepuram">Kancheepuram</option>
+                <option value="Kanniyakumari">Kanniyakumari</option>
+                <option value="Karur">Karur</option>
+                <option value="Krishnagiri">Krishnagiri</option>
+                <option value="Madurai">Madurai</option>
+                <option value="Mayiladuthurai">Mayiladuthurai</option>
+                <option value="Nagapattinam">Nagapattinam</option>
+                <option value="Namakkal">Namakkal</option>
+                <option value="Nilgiris">Nilgiris</option>
+                <option value="Perambalur">Perambalur</option>
+                <option value="Pudukkottai">Pudukkottai</option>
+                <option value="Ramanathapuram">Ramanathapuram</option>
+                <option value="Ranipet">Ranipet</option>
+                <option value="Salem">Salem</option>
+                <option value="Sivaganga">Sivaganga</option>
+                <option value="Tenkasi">Tenkasi</option>
+                <option value="Thanjavur">Thanjavur</option>
+                <option value="Theni">Theni</option>
+                <option value="Thiruvallur">Thiruvallur</option>
+                <option value="Thiruvarur">Thiruvarur</option>
+                <option value="Thoothukudi">Thoothukudi</option>
+                <option value="Tiruchirappalli">Tiruchirappalli</option>
+                <option value="Tirunelveli">Tirunelveli</option>
+                <option value="Tirupattur">Tirupattur</option>
+                <option value="Tiruppur">Tiruppur</option>
+                <option value="Tiruvannamalai">Tiruvannamalai</option>
+                <option value="Vellore">Vellore</option>
+                <option value="Virudhunagar">Virudhunagar</option>
+            </select>
+        </div>
+    </div>
+
+    <hr>
+
+    <form id="quizForm" onsubmit="event.preventDefault(); submitQuiz();">
+        <div id="questionsList"></div>
+        <button type="submit" id="submitBtn">Submit Test</button>
+    </form>
+</div>
+
+<div class="container" id="resultArea">
+    <div class="score-box">
+        <h2>Test Submitted!</h2>
+        <p>Your Score:</p>
+        <div class="score-display" id="finalScore">0 / 14</div>
+        <p style="color:green;">✔ Your result has been recorded.</p>
+    </div>
+    <h3>Detailed Review</h3>
+    <hr>
+    <div id="reviewContainer"></div>
+    <button onclick="location.reload()" style="margin-top:20px; background-color:#003366; color:white; padding:10px 20px; border:none; cursor:pointer;">Take Another Test</button>
+</div>
+
+<div class="footer">
+    &copy; Doss Does English | SSLC Exam Prep
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_eL3rIgeOn9_rupIiHPLZBtNS87TK5ZYHVpk4VT2H8BM8Sz-AQC75cT3r1PZA_cl3aA/exec"; 
+    
+    // --- TEST DATA ---
+    const TEST_ID = "Test-04"; 
+    const TEST_TITLE = "August 2022 Question Paper";
+    const questions = [
+        { q: "Synonym: 'Scraping his beak to <i>whet</i> it.'", options: ["dull", "bright", "sharpen", "cut"], ans: 2 },
+        { q: "Synonym: 'A little <i>rustic</i> appearance.'", options: ["typical", "soft", "shabby", "neat"], ans: 0 },
+        { q: "Synonym: 'To <i>grapple</i> with the challenges.'", options: ["calm", "fight", "anger", "stare"], ans: 1 },
+        { q: "Antonym: 'Instead of the <i>cloistered</i> existence.'", options: ["opened", "enclosed", "revealed", "suppressed"], ans: 0 },
+        { q: "Antonym: 'How <i>cranky</i> he was.'", options: ["Unique", "Known", "Peculiar", "Strange"], ans: 3 },
+        { q: "Antonym: 'Undertaken in <i>consonance</i> with policy.'", options: ["disagreement", "actions", "opinions", "agreement"], ans: 0 },
+        { q: "Plural form of 'furniture'", options: ["furnitures", "furniturs", "furniture", "furnituries"], ans: 2 },
+        { q: "Prefix for 'obedient'", options: ["im", "dis", "un", "in"], ans: 1 },
+        { q: "Expansion of ATM", options: ["Automatic Teller Machine", "Automated Teller Machine", "Automized Teller Machine", "Automobile Tele Machine"], ans: 1 },
+        { q: "Put you to ____ a farm.", options: ["work out", "work in", "work on", "work down"], ans: 1 },
+        { q: "Compound word: 'under' + ____", options: ["world", "water", "store", "room"], ans: 0 },
+        { q: "The horse jumped ____ the fence.", options: ["across", "on", "over", "beyond"], ans: 2 },
+        { q: "If I were a bird, I ____ around the world.", options: ["would have flown", "would fly", "flew", "can fly"], ans: 1 },
+        { q: "____ he was poor, he was happy.", options: ["As", "Though", "But", "When"], ans: 1 }
+    ];
+    
+    // --- LOGIC ---
+    document.getElementById("testTitle").innerText = TEST_ID + ": " + TEST_TITLE;
+    const list = document.getElementById("questionsList");
+    const reviewList = document.getElementById("reviewContainer");
+
+    questions.forEach((q, index) => {
+        let html = `<div class="question-block"><div class="question-text">Q${index + 1}. ${q.q}</div><div class="options">`;
+        q.options.forEach((opt, optIndex) => {
+            html += `<label><input type="radio" name="q${index}" value="${optIndex}" required> ${opt}</label>`;
+        });
+        html += `</div></div>`;
+        list.innerHTML += html;
+    });
+
+    // Handle Custom School
+    function toggleCustomSchool() {
+        const val = document.getElementById("schoolSelect").value;
+        const customInput = document.getElementById("customSchool");
+        customInput.style.display = (val === "Others") ? "block" : "none";
+        customInput.required = (val === "Others");
+    }
+
+    // Handle Custom Section
+    function toggleCustomSection() {
+        const val = document.getElementById("section").value;
+        const customInput = document.getElementById("customSection");
+        customInput.style.display = (val === "Others") ? "block" : "none";
+        customInput.required = (val === "Others");
+    }
+
+    function submitQuiz() {
+        const btn = document.getElementById("submitBtn");
+        btn.textContent = "Please wait...";
+        btn.disabled = true;
+        
+        let score = 0;
+        let reviewHTML = "";
+        let sheetAnswers = []; 
+        let cellColors = []; 
+
+        questions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            let userAnsText = "Not Answered";
+            let isCorrect = false;
+            let statusClass = "status-wrong";
+            let statusText = "Wrong";
+            
+            if (selected) {
+                const val = parseInt(selected.value);
+                userAnsText = q.options[val];
+                if (val === q.ans) { 
+                    score++; 
+                    isCorrect = true; 
+                    statusClass = "status-correct"; 
+                    statusText = "Correct"; 
+                }
+            }
+            
+            sheetAnswers.push(userAnsText);
+            
+            if(isCorrect) {
+                cellColors.push("#ffffff"); 
+            } else {
+                cellColors.push("#f4c7c3"); 
+            }
+
+            reviewHTML += `<div class="review-block"><div class="review-q">Q${index + 1}: ${q.q}</div><div class="review-your-ans">Your Answer: <b>${userAnsText}</b> <span class="${statusClass}">(${statusText})</span></div>${!isCorrect ? `<div class="correct-ans-display">Correct Answer: ${q.options[q.ans]}</div>` : ''}</div>`;
+        });
+
+        // Gather Dynamic Fields
+        let school = document.getElementById("schoolSelect").value;
+        if (school === "Others") school = document.getElementById("customSchool").value;
+
+        let section = document.getElementById("section").value;
+        if (section === "Others") section = document.getElementById("customSection").value;
+
+        const payload = {
+            testId: TEST_ID,
+            name: document.getElementById("studentName").value,
+            classVal: document.getElementById("classVal").value,
+            section: section,
+            school: school,
+            district: document.getElementById("districtSelect").value, // New District Data
+            score: score,
+            sheetAnswers: sheetAnswers,
+            cellColors: cellColors 
+        };
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST", mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            document.getElementById("quizContainer").style.display = "none";
+            document.getElementById("resultArea").style.display = "block";
+            document.getElementById("finalScore").innerText = score + " / 14";
+            reviewList.innerHTML = reviewHTML;
+            window.scrollTo(0,0);
+        }).catch(error => {
+            alert("Connection Error. Score displayed below.");
+            document.getElementById("quizContainer").style.display = "none";
+            document.getElementById("resultArea").style.display = "block";
+            document.getElementById("finalScore").innerText = score + " / 14";
+            reviewList.innerHTML = reviewHTML;
+            window.scrollTo(0,0);
+        });
+    }
+</script>
+</body>
+</html>
